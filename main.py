@@ -1,8 +1,8 @@
 import os
 import threading
-from tkinter import Tk, Label, Entry, Button, messagebox, Frame, Text
+from tkinter import Tk, Text, Entry, Frame, Button, messagebox  # Use tkinter.Button and messagebox
 from tkinterdnd2 import DND_FILES, TkinterDnD
-from tkinter.ttk import Progressbar
+from tkinter.ttk import Progressbar, Label, Style
 from PIL import Image
 
 
@@ -103,37 +103,54 @@ def reset_interface():
 # Create main window
 root = TkinterDnD.Tk()
 root.title("Photo Compressor")
-root.geometry("600x450")
+root.geometry("500x400")  # Set default window size to 500x400
+root.minsize(500, 400)  # Prevent window from being smaller than 500x400
+root.configure(bg='#F2F2F2')  # Light gray background color
+
+# Improve DPI awareness for high-resolution displays
+root.tk.call('tk', 'scaling', 1.5)  # Set DPI scaling to 150%
+
+# Style for Apple-like appearance
+style = Style()
+style.configure("TButton", font=("Helvetica", 12), padding=5)  # Adjust button font size and padding
+style.configure("TLabel", font=("Helvetica", 10), background="#F2F2F2", foreground="#333333")  # Smaller font size
+style.configure("TEntry", font=("Helvetica", 10), padding=5)
+style.configure("TProgressbar", thickness=15)  # Thinner progress bar
 
 # Instructions label
-Label(root, text="Drag and drop photos below and set the target size (MB):").pack(pady=10)
+Label(root, text="Drag and drop photos below and set the target size (MB):", style="TLabel").pack(pady=8)
 
 # Entry for target size
-frame = Frame(root)
-frame.pack(pady=10)
-Label(frame, text="Target Size (MB):").grid(row=0, column=0)
-target_size_entry = Entry(frame)
+frame = Frame(root, bg='#F2F2F2')  # Using tkinter Frame to allow background color
+frame.pack(pady=5)
+Label(frame, text="Target Size (MB):", style="TLabel").grid(row=0, column=0)
+target_size_entry = Entry(frame, font=("Helvetica", 10), relief="flat", bg="#FFFFFF", highlightthickness=0)
 target_size_entry.grid(row=0, column=1)
 
 # Text area to show dropped files
 file_paths = []
-file_list = Text(root, width=70, height=10, bg="white", state="disabled")
-file_list.pack(pady=10)
+file_list = Text(root, width=60, height=8, bg="#FFFFFF", state="disabled", font=("Helvetica", 10), relief="flat",
+                 highlightthickness=0)
+file_list.pack(pady=8)
 file_list.drop_target_register(DND_FILES)
 file_list.dnd_bind('<<Drop>>', drop)
 
 # Progress bar
-progress_bar = Progressbar(root, length=500, mode='determinate')
-progress_bar.pack(pady=10)
-progress_label = Label(root, text="Ready to process files")
+progress_bar = Progressbar(root, length=400, mode='determinate')  # Adjust progress bar length
+progress_bar.pack(pady=8)
+progress_label = Label(root, text="Ready to process files", style="TLabel")
 progress_label.pack(pady=5)
 
-# Start compression button
-start_button = Button(root, text="Start Compression", command=start_compression)
+# Start compression button with Apple-like design
+start_button = Button(root, text="Start Compression", command=start_compression, font=("Helvetica", 12, "normal"),
+                      bg="#E8E8E8", activebackground="#D0D0D0", relief="flat", borderwidth=2, padx=20, pady=8,
+                      highlightthickness=2, highlightbackground="#C0C0C0")
 start_button.pack(pady=5)
 
-# Reset button to prepare for a new batch of files
-reset_button = Button(root, text="Reset", command=reset_interface)
+# Reset button with Apple-like design
+reset_button = Button(root, text="Reset", command=reset_interface, font=("Helvetica", 12, "normal"),
+                      bg="#E8E8E8", activebackground="#D0D0D0", relief="flat", borderwidth=2, padx=20, pady=8,
+                      highlightthickness=2, highlightbackground="#C0C0C0")
 reset_button.pack(pady=5)
 
 root.mainloop()
