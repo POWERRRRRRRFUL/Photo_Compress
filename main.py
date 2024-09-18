@@ -5,6 +5,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 from tkinter.ttk import Progressbar
 from PIL import Image
 
+
 def compress_image(file_path, target_size_mb):
     target_size_bytes = target_size_mb * 1024 * 1024
     current_size = os.path.getsize(file_path)
@@ -39,6 +40,7 @@ def compress_image(file_path, target_size_mb):
 
     return compressed_file_path, f"Compressed to {last_valid_size / (1024 * 1024):.2f} MB"
 
+
 def process_files(file_paths, target_size_mb):
     progress_bar['value'] = 0
     total_files = len(file_paths)
@@ -50,10 +52,16 @@ def process_files(file_paths, target_size_mb):
         root.update_idletasks()
 
     messagebox.showinfo("Compression Completed", "All selected images have been processed.")
+
     # Add a separator line after each batch processing
     file_list.config(state="normal")
-    file_list.insert("end", "\n" + "="*50 + "\n")  # Add a separator line to distinguish batches
+    file_list.insert("end", "\n" + "=" * 50 + "\n")  # Add a separator line to distinguish batches
     file_list.config(state="disabled")
+
+    # Update the status and allow for next batch processing
+    progress_label.config(text="Ready for next batch")
+    reset_interface()
+
 
 def drop(event):
     files = root.tk.splitlist(event.data)
@@ -62,6 +70,7 @@ def drop(event):
     file_list.delete(1.0, "end")
     file_list.insert("end", "\n".join(file_paths) + "\n")
     file_list.config(state="disabled")
+
 
 def start_compression():
     if not file_paths:
@@ -78,6 +87,18 @@ def start_compression():
     # Run compression in a background thread to keep GUI responsive
     compression_thread = threading.Thread(target=process_files, args=(file_paths, target_size_mb))
     compression_thread.start()
+
+
+def reset_interface():
+    """Reset the interface to prepare for a new batch of files."""
+    global file_paths
+    file_paths = []  # Clear the file list
+    file_list.config(state="normal")
+    file_list.delete(1.0, "end")  # Clear the text area
+    file_list.config(state="disabled")
+    progress_label.config(text="Ready to process files")
+    progress_bar['value'] = 0
+
 
 # Create main window
 root = TkinterDnD.Tk()
@@ -109,6 +130,10 @@ progress_label.pack(pady=5)
 
 # Start compression button
 start_button = Button(root, text="Start Compression", command=start_compression)
-start_button.pack(pady=20)
+start_button.pack(pady=5)
+
+# Reset button to prepare for a new batch of files
+reset_button = Button(root, text="Reset", command=reset_interface)
+reset_button.pack(pady=5)
 
 root.mainloop()
