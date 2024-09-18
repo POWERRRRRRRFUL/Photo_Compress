@@ -84,4 +84,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## All Rights Reserved
 
 All rights to this program are reserved. Unauthorized copying, distribution, modification, or any other usage of this software, in whole or in part, without the prior written permission of the author is strictly prohibited. For inquiries regarding commercial use or obtaining permission, please contact the author directly.
-```
