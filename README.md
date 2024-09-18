@@ -1,6 +1,3 @@
-以下是一个完整、简洁且专业的 `README.md` 文件示例，适用于你的 **Photo Compressor** 项目。此文件内容涵盖项目介绍、安装说明、使用步骤、依赖库，以及版权声明等。
-
-```markdown
 # Photo Compressor Application
 
 A simple and user-friendly application to compress photos efficiently. The app provides a graphical interface with drag-and-drop support for ease of use, allowing users to specify a target size in MB for photo compression.
