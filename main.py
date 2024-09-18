@@ -1,9 +1,9 @@
 import os
+import threading
 from tkinter import Tk, Label, Entry, Button, messagebox, Frame, Text
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from tkinter.ttk import Progressbar
 from PIL import Image
-from concurrent.futures import ThreadPoolExecutor
 
 def compress_image(file_path, target_size_mb):
     target_size_bytes = target_size_mb * 1024 * 1024
@@ -75,8 +75,9 @@ def start_compression():
         messagebox.showerror("Invalid Input", "Please enter a valid number for the target size.")
         return
 
-    # Directly run compression without threading to avoid freezing issues
-    process_files(file_paths, target_size_mb)
+    # Run compression in a background thread to keep GUI responsive
+    compression_thread = threading.Thread(target=process_files, args=(file_paths, target_size_mb))
+    compression_thread.start()
 
 # Create main window
 root = TkinterDnD.Tk()
